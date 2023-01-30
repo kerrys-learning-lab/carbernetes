@@ -16,9 +16,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pca9685-service
-  labels:
-    {{ include "c9s.workload-labels" .Values.pca9685_workload | indent 4 }}
-    {{ include "c9s.meta-labels" . | indent 4 }}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -26,10 +23,6 @@ spec:
     matchLabels:
       role: pca9685-service
   template:
-    metadata:
-      labels:
-        {{ include "c9s.workload-labels" .Values.pca9685_workload | indent 8 }}
-        {{ include "c9s.meta-labels" . | indent 8 }}
     spec:
       containers:
         - name: pca9685-service
