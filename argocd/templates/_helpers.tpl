@@ -37,13 +37,10 @@ app.kubernetes.io/component: {{  .component }}
 */}}
 {{- define "c9s.service-labels" -}}
 app.kubernetes.io/component: {{ .component }}
-app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end -}}
 
 {{/*
   K8s labels for all components
 */}}
 {{- define "c9s.meta-labels" -}}
-app.kubernetes.io/part-of: {{ include "application.name" . }}
-app.kubernetes.io/managed-by: {{ include "application.chart" . }}
 {{- end -}}
