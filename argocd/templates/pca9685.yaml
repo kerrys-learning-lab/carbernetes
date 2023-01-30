@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "application.fullname" . }}
+  labels:
+    app: {{ template "application.name" . }}
+    chart: {{ template "application.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ template "application.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "application.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: pca9685-service
+          image: {{ template "application.image" (dict "Values" .Values "Image" .Values.pca9685_service.image) }}
+          args:
+            - --config-file-path
+            - /etc/pca9685.yaml
+          env:
+            - name: ROCKET_CONFIG
+              value: /etc/rocket.toml
+            - name: RUST_LOG
+              value: debug
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9999
+              protocol: TCP
+          volumeMounts:
+            - name: auto-config-maps
+              mountPath: /etc/rocket.toml
+              subpath: rocket.toml
+            - name: auto-config-maps
+              mountPath: /etc/pca9685.yaml
+              subpath: pca9685.yaml
+            - name: rpi-i2c-device
+              mountPath: /dev/i2c-1
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+      volumes:
+        - name: auto-config-maps
+          configMap:
+            name: auto-config-maps
+        - name: rpi-i2c-device
+          hostPath:
+            path: /dev/i2c-1
+            type: File

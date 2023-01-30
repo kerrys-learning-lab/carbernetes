@@ -1,13 +1,14 @@
 ---
-- hosts: rpi
+- name: Configure Raspberry Pi for carbernetes
+  hosts: rpi
   become: true
   tasks:
     - name: Upgrade the OS (apt-get upgrade)
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         upgrade: dist
-        autoclean: yes
-        autoremove: yes
+        autoclean: true
+        autoremove: true
       notify:
         - Restart rpi
 
@@ -20,11 +21,11 @@
           - raspberrypi-bootloader
           - raspberrypi-kernel
           - snapd
-        state: latest
+        state: present
       notify:
         - Restart rpi
 
-    - name: Flush handlers
+    - name: Flush handlers after upgrade
       ansible.builtin.meta: flush_handlers
 
     - name: Docker host prerequisites
@@ -50,9 +51,32 @@
           - docker-ce-cli
           - containerd.io
           - docker-compose-plugin
-        state: latest
+        state: present
         update_cache: true
-            
+
+    - name: Enable container features (/boot/cmdline.txt)
+      ansible.builtin.replace:
+        path: /boot/cmdline.txt
+        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_items:
+        - "cgroup_enable=cpuset"
+        - "cgroup_memory=1"
+        - "cgroup_enable=memory"
+      notify:
+        - Restart rpi
+
+    - name: Enable I2C (/boot/config.txt)
+      ansible.builtin.lineinfile:
+        dest: /boot/config.txt
+        regexp: '^#dtparam=i2c_arm=on$'
+        line: 'dtparam=i2c_arm=on'
+      notify:
+        - Restart rpi
+
+    - name: Flush handlers Docker / container / I2C setup
+      ansible.builtin.meta: flush_handlers
+
     - name: Install microk8s
       community.general.snap:
         name:
@@ -67,29 +91,45 @@
           - microk8s
         append: true
 
-    - name: Enable microk8s plugins
-      ansible.builtin.include_role:
-        name: gepaplexx.microk8s
-      vars:
-          microk8s_plugins:
-            istio: true
-            ingress: true
+    - name: Status of mycommunity repo
+      ansible.builtin.command: /snap/bin/microk8s addons repo list
+      register: microk8s_community_repo
+      changed_when: false
 
-    - name: Enable container features (/boot/cmdline.txt)
-      replace:
-        path: /boot/cmdline.txt
-        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
-        replace: '\1 {{ item }}'
-      with_items:
-        - "cgroup_enable=cpuset"
-        - "cgroup_memory=1"
-        - "cgroup_enable=memory"
+    - name: Add custom microk8s community repo
+      ansible.builtin.command: >
+        /snap/bin/microk8s addons repo add mycommunity  https://github.com/kerrys-learning-lab/microk8s-community-addons
+      when: microk8s_community_repo.stdout.find('mycommunity') == -1
 
-    - name: Enable I2C (/boot/config.txt)
-      lineinfile:
-        dest: /boot/config.txt
-        regexp: '^#dtparam=i2c_arm=on$'
-        line: 'dtparam=i2c_arm=on'
+    - name: Status of microk8s dns add-on
+      ansible.builtin.command: /snap/bin/microk8s status -a dns
+      register: microk8s_dns_addon
+      changed_when: false
+
+    - name: Install microk8s dns add-on
+      ansible.builtin.command: /snap/bin/microk8s enable dns
+      when: microk8s_dns_addon.stdout.find('enabled') == -1
+
+    - name: Status of microk8s argocd add-on
+      ansible.builtin.command: /snap/bin/microk8s status -a argocd
+      register: microk8s_argocd_addon
+      changed_when: false
+
+    - name: Install microk8s argocd add-on
+      ansible.builtin.command: /snap/bin/microk8s enable argocd
+      when: microk8s_argocd_addon.stdout.find('enabled') == -1
+
+    - name: Get microk8s kubectl configuration
+      ansible.builtin.command: /snap/bin/microk8s config
+      register: microk8s_kubectl_config
+      changed_when: false
+
+    - name: Save kubectl config
+      delegate_to: localhost
+      ansible.builtin.copy:
+        content: "{{ microk8s_kubectl_config.stdout }}"
+        dest: "kubectl-config-{{ inventory_hostname }}.yaml"
+        mode: '644'
 
   handlers:
     - name: Restart rpi

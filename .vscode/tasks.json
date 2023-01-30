@@ -8,6 +8,23 @@
       "type": "shell",
       "command": "ssh pi@raspberrypi.local",
       "problemMatcher": []
+    },
+    {
+      "label": "k9s",
+      "type": "shell",
+      "command": "k9s",
+      "args": [
+        "--headless"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false
+      }
     }
   ]
 }
