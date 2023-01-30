@@ -21,6 +21,9 @@ spec:
     matchLabels:
       role: pca9685-service
   template:
+    metadata:
+      labels:
+        role: pca9685-service
     spec:
       containers:
         - name: pca9685-service
