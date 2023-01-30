@@ -37,6 +37,7 @@ app.kubernetes.io/component: {{  .component }}
 */}}
 {{- define "c9s.service-labels" -}}
 app.kubernetes.io/component: {{ .component }}
+app.kubernetes.io/part-of: {{ include "application.name" . }}
 {{- end -}}
 
 {{/*
