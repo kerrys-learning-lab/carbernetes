@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: pca9685-service
   labels:
-    {{- include "c9s.meta-labels" . | indent 4 -}}
+{{ include "c9s.meta-labels" . | indent 4 }}
 spec:
   selector:
     role: pca9685-service
