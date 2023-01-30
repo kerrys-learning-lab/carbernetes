@@ -1,4 +1,4 @@
-rpi:
+rpi_hosts:
   hosts:
     # Arbitrary (but unique) Ansible alias for each pi
     rpi01:

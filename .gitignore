@@ -1,3 +1,2 @@
-ansible/inventory.yaml
-ansible/kubectl-config-*.yaml
+ansible/config
 .cz-commit-message

@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: auto-config-maps
 data:
-  {{- range $path, $_ :=  .Files.Glob  "config/**.yaml" }}    
+  {{- range $path, $_ :=  .Files.Glob  "config/**.*" }}    
   {{ $path | trimPrefix "config/" }}: |- 
 {{ $.Files.Get $path | indent 4 }}
   {{ end }}

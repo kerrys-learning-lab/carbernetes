@@ -1,0 +1,15 @@
+---
+rpi_user: pi
+local_owner: vscode
+local_group: vscode
+local_kubeconfig_dest_path: /workspace/ansible/config
+microk8s: /snap/bin/microk8s
+microk8s_community_addon_repo: https://github.com/kerrys-learning-lab/microk8s-community-addons
+argocd_project: default
+argocd_application_name: carbernetes
+argocd_application_namespace: c9s
+argocd_repo_secret_name: carbernetes-repo
+argocd_repo_url: git@github.com:kerrys-learning-lab/carbernetes.git
+argocd_repo_target_revision: HEAD
+argocd_repo_path: argocd
+argocd_repo_private_key: TBP

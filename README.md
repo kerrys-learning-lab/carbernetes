@@ -8,8 +8,9 @@ Automate maintenance and configuration:
 Add IP to inventory.yaml
 
 Verify access [host]
-$ ansible -i ansible/inventory.yaml all -m ping
-$ ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml
+$ ansible -i ansible/config/inventory.yaml all -m ping
+$ ansible-playbook -i ansible/config/inventory.yaml \
+                   ansible/playbook.yaml
 
 
 References:
