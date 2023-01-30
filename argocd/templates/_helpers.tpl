@@ -43,5 +43,5 @@ app.kubernetes.io/component: {{ .component }}
   K8s labels for all components
 */}}
 {{- define "c9s.meta-labels" -}}
-foo: bar
+app.kubernetes.io/partof: foo
 {{- end -}}
