@@ -1,41 +1,48 @@
 {{/* vim: set filetype=mustache: */}}
+
 {{/*
-Expand the name of the chart.
+    Expand the name of the chart.
 */}}
 {{- define "application.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+  {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "application.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
+    Create chart name and version as used by the chart label.
 */}}
 {{- define "application.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+  {{- printf "%s-%s [%s]" .Chart.Name .Chart.Version .Release.Service | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 
 {{/*
-Create image name and tag (assuming the image is in the default repository)
-and the .Image argument is a dict containing 'name' and 'tag'.
+    Create image name and tag (assuming the image is in the default repository)
+    and the .Image argument is a dict containing 'name' and 'tag'.
 */}}
 {{- define "application.image" -}}
-{{- printf "%s/%s:%s" .Values.image_repository .Image.name .Image.tag -}}
+  {{- printf "%s/%s:%s" .Values.image_repository .Image.name .Image.tag -}}
+{{- end -}}
+
+{{/*
+  K8s labels for workloads (deployments, stateful sets, etc.)
+*/}}
+{{- define "c9s.workload-labels" -}}
+app.kubernetes.io/name: {{ .image.name }}
+app.kubernetes.io/version: {{ .image.version }}
+app.kubernetes.io/component: {{  .component }}
+{{- end -}}
+
+{{/*
+  K8s labels for services
+*/}}
+{{- define "c9s.service-labels" -}}
+app.kubernetes.io/component: {{ .component }}
+{{- end -}}
+
+{{/*
+  K8s labels for all components
+*/}}
+{{- define "c9s.meta-labels" -}}
+app.kubernetes.io/part-of: {{ template "application.name" . }}
+app.kubernetes.io/managed-by: {{ template "application.chart" . }}
 {{- end -}}
