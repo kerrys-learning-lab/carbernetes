@@ -1,6 +1,8 @@
 ---
 apiVersion: v1
 kind: Service
+metadata:
+  name: pca9685-service
 spec:
   selector:
     role: pca9685-service
@@ -11,7 +13,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pca9685-service
+  name: pca9685-service-deployment
 spec:
   replicas: 1
   revisionHistoryLimit: 3
