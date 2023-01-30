@@ -11,7 +11,7 @@
     Create chart name and version as used by the chart label.
 */}}
 {{- define "application.chart" -}}
-  {{- printf "%s-%s [%s]" .Chart.Name .Chart.Version .Release.Service | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+  {{- printf "%s %s-%s" .Release.Service .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 
