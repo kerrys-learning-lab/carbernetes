@@ -28,7 +28,7 @@
 */}}
 {{- define "c9s.workload-labels" -}}
 app.kubernetes.io/name: {{ .image.name }}
-app.kubernetes.io/version: {{ .image.version }}
+app.kubernetes.io/version: {{ .image.tag }}
 app.kubernetes.io/component: {{  .component }}
 {{- end -}}
 
