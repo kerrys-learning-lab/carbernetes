@@ -43,4 +43,8 @@ app.kubernetes.io/component: {{ .component }}
   K8s labels for all components
 */}}
 {{- define "c9s.meta-labels" -}}
+{{- $name := include "application.name" . -}}
+{{- $chart = include "application.chart" . -}}
+app.kubernetes.io/part-of: {{ $name }}
+app.kubernetes.io/managed-by: {{ $chart }}
 {{- end -}}
