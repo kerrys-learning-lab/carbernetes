@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pca9685-service
+  labels:
+    {{ include "c9s.service-labels" .Values.pca9685_service | indent 4 }}
 spec:
   selector:
     role: pca9685-service
