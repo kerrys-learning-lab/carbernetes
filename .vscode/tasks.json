@@ -25,6 +25,30 @@
         "showReuseMessage": false,
         "clear": false
       }
+    },
+    {
+      "label": "ansible playbook",
+      "type": "shell",
+      "command": "ansible-playbook",
+      "args": [
+        "-i",
+        "ansible/config/inventory.yaml",
+        "ansible/playbook.yaml"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "ArgoCD port forward (8080)",
+      "type": "shell",
+      "command": "kubectl",
+      "args": [
+        "port-forward",
+        "svc/argo-cd-argocd-server",
+        "-n",
+        "argocd",
+        "8080:443"
+      ],
+      "problemMatcher": []
     }
   ]
 }
