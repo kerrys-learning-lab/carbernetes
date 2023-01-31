@@ -50,6 +50,16 @@ E.g. `argocd app sync carbernetes --revision $(git rev-parse --short HEAD)`
 
 # Miscellaneous
 
+### Test access to in-cluster service from outside the cluster
+NOTE: Assumes an ingress exists at <xyz-service>.rpi.local
+
+```
+user@host:~ $ kubectl -n c9s port-forward svc/pca9685-service 9999:9999
+
+# The --resolve option eliminates the need to update /etc/hosts
+user@host:~ $ curl --resolve pca9685.rpi.local:9999:127.0.0.1 http://pca9685.rpi.local:9999/ping
+```
+
 ### Commit, push, and update ArgoCD
 `git commit -a -F .cz-commit-message && git push origin $(git rev-parse --abbrev-ref HEAD) && argocd app sync carbernetes --revision $(git rev-parse --short HEAD)`
 
