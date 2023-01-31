@@ -73,10 +73,6 @@ spec:
           volumeMounts:
             - name: auto-config-maps
               mountPath: /etc
-              subpath: rocket.toml
-            - name: auto-config-maps
-              mountPath: /etc
-              subpath: pca9685.yaml
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
           livenessProbe:
