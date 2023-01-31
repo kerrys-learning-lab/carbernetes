@@ -41,10 +41,13 @@ metadata:
     {{- include "c9s.workload-labels" .Values.pca9685_workload | nindent 4 }}
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       role: pca9685-service
+  replicas: 0
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -85,7 +88,6 @@ spec:
               port: http
       securityContext:
         privileged: true
-        # runAsGroup: 998 # i2c
       volumes:
         - name: auto-config-maps
           configMap:
