@@ -1,15 +1,46 @@
 ---
+# The user local to the rpi.  If using the Raspberry Pi Imager to create the
+# SD card, this will be 'pi'
 rpi_user: pi
+
+# The local (host-based) owner for any files retrieved from the pi
 local_owner: vscode
+
+# The local (host-based) group for any files retrieved from the pi
 local_group: vscode
+
+# The local (host-based) path for any config files retrieved from the pi by
+# Ansible
 local_kubeconfig_dest_path: /workspace/ansible/config
+
+# The path to the microk8s executable on the pi
 microk8s: /snap/bin/microk8s
+
+# The URL to the microks community repository.  In this case, we had to modify
+# the 'argocd' add-on to work with arm architecture.
 microk8s_community_addon_repo: https://github.com/kerrys-learning-lab/microk8s-community-addons
+
+# The project name within ArgoCD
 argocd_project: default
+
+# The application name within ArgoCD
 argocd_application_name: carbernetes
+
+# The k8s namespace scope for all carbernetes resources
 argocd_application_namespace: c9s
+
+# The name for the k8s Secret which controls access to the git repo
 argocd_repo_secret_name: carbernetes-repo
+
+# The URL of the git repo which contains the Helm files for ArgoCD to use
 argocd_repo_url: git@github.com:kerrys-learning-lab/carbernetes.git
-argocd_repo_target_revision: HEAD
-argocd_repo_path: argocd
+
+# The revision to which ArgoCD should synchronize... may be a branch, tag, ref...
+argocd_repo_target_revision: main
+
+# The path to the helm charts within the repo (relative to the root of the repo)
+argocd_repo_path: helm
+
+# An access key to allow ArgoCD to access the repo... maybe this should be
+# changed to allow anonymous/public access??
 argocd_repo_private_key: TBP
