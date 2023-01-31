@@ -60,10 +60,10 @@ spec:
           image: {{ template "application.image" (dict "Values" .Values "Image" .Values.pca9685_workload.image) }}
           args:
             - --config-file-path
-            - /etc/pca9685.yaml
+            - /etc/pca9685-service/pca9685.yaml
           env:
             - name: ROCKET_CONFIG
-              value: /etc/rocket.toml
+              value: /etc/pca9685-service/rocket.toml
             - name: RUST_LOG
               value: debug
           imagePullPolicy: IfNotPresent
@@ -77,8 +77,11 @@ spec:
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
             - name: auto-config-maps
-              mountPath: /etc
+              mountPath: /etc/pca9685-service
               subPath: pca9685.yaml
+            - name: auto-config-maps
+              mountPath: /etc/pca9685-service
+              subPath: rocket.toml
           livenessProbe:
             httpGet:
               path: /ping
