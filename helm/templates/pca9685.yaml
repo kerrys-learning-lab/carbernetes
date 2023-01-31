@@ -103,4 +103,8 @@ spec:
           hostPath:
             path: /dev/i2c-1
             type: CharDevice
+<<<<<<< HEAD
 {{ end }}
+=======
+{{ end }}
+>>>>>>> ebb1663 (feat: Accelerometer)
