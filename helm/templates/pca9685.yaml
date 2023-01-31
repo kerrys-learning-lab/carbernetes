@@ -41,7 +41,6 @@ metadata:
     {{- include "c9s.workload-labels" .Values.pca9685_workload | nindent 4 }}
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
-  replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
