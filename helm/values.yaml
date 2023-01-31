@@ -4,6 +4,8 @@ pca9685_service:
   component: servo-control
 
 pca9685_workload:
+  # Should only ever be 1 (enabled) or 0 (disabled)
+  replicas: 0
   component: servo-control
   image:
     name: pca9685-service
