@@ -74,11 +74,10 @@ spec:
               containerPort: 9999
               protocol: TCP
           volumeMounts:
-            - name: auto-config-maps
-              mountPath: /etc
-              subPath: pca9685.yaml
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
+            - name: auto-config-maps
+              mountPath: /etc
           livenessProbe:
             httpGet:
               path: /ping
