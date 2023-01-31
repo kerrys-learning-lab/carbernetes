@@ -76,8 +76,8 @@ spec:
           volumeMounts:
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
-            # - name: auto-config-maps
-            #   mountPath: /etc
+            - name: auto-config-maps
+              mountPath: /etc
           livenessProbe:
             httpGet:
               path: /ping
