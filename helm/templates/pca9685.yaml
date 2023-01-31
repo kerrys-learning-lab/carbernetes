@@ -22,7 +22,7 @@ metadata:
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
   rules:
-  - host: raspberrypi.local
+  - host: pca9685.rpi.local
     http:
       paths:
         - path: /
@@ -41,7 +41,7 @@ metadata:
     {{- include "c9s.workload-labels" .Values.pca9685_workload | nindent 4 }}
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
-  revisionHistoryLimit: 1
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       role: pca9685-service
