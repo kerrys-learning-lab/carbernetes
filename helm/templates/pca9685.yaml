@@ -77,10 +77,10 @@ spec:
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
             - name: auto-config-maps
-              mountPath: /etc/pca9685-service
+              mountPath: /etc/pca9685-service/pca9685.yaml
               subPath: pca9685.yaml
             - name: auto-config-maps
-              mountPath: /etc/pca9685-service
+              mountPath: /etc/pca9685-service/rocket.toml
               subPath: rocket.toml
           livenessProbe:
             httpGet:
