@@ -64,6 +64,8 @@ spec:
             - name: RUST_LOG
               value: debug
           imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
           ports:
             - name: http
               containerPort: 9999
@@ -85,6 +87,8 @@ spec:
             httpGet:
               path: /ping
               port: http
+      securityContext:
+        privileged: true
       volumes:
         - name: auto-config-maps
           configMap:
