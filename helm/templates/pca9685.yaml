@@ -89,6 +89,7 @@ spec:
               port: http
       securityContext:
         privileged: true
+        runAsGroup: 998 # i2c
       volumes:
         - name: auto-config-maps
           configMap:

@@ -10,7 +10,7 @@ NOTE: If using VSCode, template files should be copied automatically upon
 * Execute the ansible playbook
   ```
     user@host:~ $ ansible-playbook -i ansible/config/inventory.yaml \
-                                      ansible/playbook.yaml
+                                      ansible/main-rpi-playbook.yaml
   ```
 
 # Connecting to ArgoCD (on the pi)
@@ -52,6 +52,20 @@ E.g. `argocd app sync carbernetes --revision $(git rev-parse --short HEAD)`
 
 ### Commit, push, and update ArgoCD
 `git commit -a -F .cz-commit-message && git push origin $(git rev-parse --abbrev-ref HEAD) && argocd app sync carbernetes --revision $(git rev-parse --short HEAD)`
+
+# Troubleshooting
+
+### No route to host 10.152.183.1 (kubernetes service)
+
+Restart the iptables on the rpi:
+```
+pi@raspberrypi:~ $ sudo iptables --flush
+pi@raspberrypi:~ $ sudo iptables --table nat --flush
+
+# or
+user@host:~ $ ansible-playbook -i ansible/config/inventory.yaml \
+                                  ansible/restart-iptables-playbook.yaml
+```
 
 References:
 
