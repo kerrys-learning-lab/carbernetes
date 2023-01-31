@@ -97,4 +97,4 @@ spec:
         - name: rpi-i2c-device
           hostPath:
             path: /dev/i2c-1
-            type: File
+            type: CharDevice
