@@ -33,7 +33,7 @@
       "args": [
         "-i",
         "ansible/config/inventory.yaml",
-        "ansible/playbook.yaml"
+        "ansible/main-rpi-playbook.yaml"
       ],
       "problemMatcher": []
     },

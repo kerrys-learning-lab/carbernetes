@@ -35,6 +35,15 @@
   ansible.builtin.command: "{{ microk8s }} enable dns"
   when: microk8s_dns_addon.stdout.find('enabled') == -1
 
+- name: Status of microk8s ingress add-on
+  ansible.builtin.command: "{{ microk8s }} status -a ingress"
+  register: microk8s_ingress_addon
+  changed_when: false
+
+- name: Install microk8s ingress add-on
+  ansible.builtin.command: "{{ microk8s }} enable ingress"
+  when: microk8s_ingress_addon.stdout.find('enabled') == -1
+
 - name: Status of microk8s argocd add-on
   ansible.builtin.command: "{{ microk8s }} status -a argocd"
   register: microk8s_argocd_addon

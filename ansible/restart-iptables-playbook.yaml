@@ -1,0 +1,12 @@
+- name: Restart rpi iptables
+  hosts: rpi_hosts
+  become: true
+  tasks:
+    - name: Flush iptables filters
+      ansible.builtin.iptables:
+        table: filter
+        flush: true
+    - name: Flush iptables NAT
+      ansible.builtin.iptables:
+        table: nat
+        flush: true

@@ -13,6 +13,26 @@ spec:
     - port: 9999
       targetPort: http
 ---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pca9685-service-ingress
+  labels:
+    {{- include "c9s.service-labels" .Values.pca9685_service | nindent 4 }}
+    {{- include "c9s.meta-labels" . | nindent 4 }}
+spec:
+  rules:
+  - host: pca9685.rpi.local
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: pca9685-service
+              port:
+                name: http
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,11 +41,13 @@ metadata:
     {{- include "c9s.workload-labels" .Values.pca9685_workload | nindent 4 }}
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       role: pca9685-service
+  replicas: 1
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -38,26 +60,28 @@ spec:
           image: {{ template "application.image" (dict "Values" .Values "Image" .Values.pca9685_workload.image) }}
           args:
             - --config-file-path
-            - /etc/pca9685.yaml
+            - /etc/pca9685-service/pca9685.yaml
           env:
             - name: ROCKET_CONFIG
-              value: /etc/rocket.toml
+              value: /etc/pca9685-service/rocket.toml
             - name: RUST_LOG
               value: debug
           imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
           ports:
             - name: http
               containerPort: 9999
               protocol: TCP
           volumeMounts:
-            - name: auto-config-maps
-              mountPath: /etc/rocket.toml
-              subpath: rocket.toml
-            - name: auto-config-maps
-              mountPath: /etc/pca9685.yaml
-              subpath: pca9685.yaml
             - name: rpi-i2c-device
               mountPath: /dev/i2c-1
+            - name: auto-config-maps
+              mountPath: /etc/pca9685-service/pca9685.yaml
+              subPath: pca9685.yaml
+            - name: auto-config-maps
+              mountPath: /etc/pca9685-service/rocket.toml
+              subPath: rocket.toml
           livenessProbe:
             httpGet:
               path: /ping
@@ -66,6 +90,8 @@ spec:
             httpGet:
               path: /ping
               port: http
+      securityContext:
+        privileged: true
       volumes:
         - name: auto-config-maps
           configMap:
@@ -73,4 +99,4 @@ spec:
         - name: rpi-i2c-device
           hostPath:
             path: /dev/i2c-1
-            type: File
+            type: CharDevice
