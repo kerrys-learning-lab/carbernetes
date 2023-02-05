@@ -51,13 +51,13 @@ E.g. `argocd app sync carbernetes --revision $(git rev-parse --short HEAD)`
 # Miscellaneous
 
 ### Test access to in-cluster service from outside the cluster
-NOTE: Assumes an ingress exists at <xyz-service>.rpi.local
+NOTE: Assumes an ingress exists at <xyz-service>
 
 ```
 user@host:~ $ kubectl -n c9s port-forward svc/pca9685-service 9999:9999
 
 # The --resolve option eliminates the need to update /etc/hosts
-user@host:~ $ curl --resolve pca9685.rpi.local:9999:127.0.0.1 http://pca9685.rpi.local:9999/ping
+user@host:~ $ curl --resolve pca9685:9999:127.0.0.1 http://pca9685:9999/ping
 ```
 
 ### Commit, push, and update ArgoCD
@@ -85,4 +85,4 @@ https://hub.docker.com/r/geerlingguy/docker-debian10-ansible
 
 https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible
 
-https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04 
+https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04

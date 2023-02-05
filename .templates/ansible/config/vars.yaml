@@ -43,4 +43,8 @@ argocd_repo_path: helm
 
 # An access key to allow ArgoCD to access the repo... maybe this should be
 # changed to allow anonymous/public access??
-argocd_repo_private_key: TBP
+argocd_repo_private_key: <TBP>
+
+# RabbitMQ auth:
+rabbitmq_default_user: <TBP>
+rabbitmq_default_pass: <TBP>

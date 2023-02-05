@@ -1,0 +1,78 @@
+# NOTE: The Bitnami rabbitmq helm Chart (https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq)
+#       claims to be able to customize plugins through the 'extraPlugins'
+#       value, which then sets the RABBITMQ_PLUGINS environment variable.  The
+#       chart "works" in that the env var is updated, but it seems that rabbitmq
+#       does not utilize the env var (and I can find no documentation claiming
+#       that it does)
+#
+#       So, the ConfigMap.data.enabled_plugins, extraVolumes, and extraVolumes
+#       are a work-around to  enable plugins.
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-c9s-conf
+  namespace: {{ argocd_application_namespace }}
+data:
+  enabled_plugins: |
+    [rabbitmq_management,rabbitmq_prometheus,rabbitmq_mqtt].
+  mqtt.conf: |
+    mqtt.allow_anonymous  = true
+    default_user          = {{ rabbitmq_default_user }}
+    default_pass          = {{ rabbitmq_default_pass }}
+    mqtt.default_user     = {{ rabbitmq_default_user }}
+    mqtt.default_pass     = {{ rabbitmq_default_pass }}
+  logging.conf: |
+    log.console       = true
+    log.console.level = debug
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rabbitmq
+  namespace: argocd
+spec:
+  project: {{ argocd_project }}
+  source:
+    chart: rabbitmq
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 11.7.1
+    helm:
+      parameters:
+        - name: image.repository
+          value: rabbitmq
+        - name: image.tag
+          value: 3.11.8
+        - name: persistence.storageClass
+          value: microk8s-hostpath
+        - name: service.extraPorts
+          value: |
+            - name: mqtt-tcp
+              port: 1883
+              targetPort: mqtt-tcp
+        - name: extraContainerPorts
+          value: |
+            - name: mqtt-tcp
+              containerPort: 1883
+              protocol: TCP
+        - name: extraVolumes
+          value: |
+            - name: rabbitmq-c9s-conf
+              configMap:
+                name: rabbitmq-c9s-conf
+        - name: extraVolumeMounts
+          value: |
+            - name: rabbitmq-c9s-conf
+              mountPath: /etc/rabbitmq/enabled_plugins
+              subPath: enabled_plugins
+            - name: rabbitmq-c9s-conf
+              mountPath: /etc/rabbitmq/conf.d/mqtt.conf
+              subPath: mqtt.conf
+            - name: rabbitmq-c9s-conf
+              mountPath: /etc/rabbitmq/conf.d/logging.conf
+              subPath: logging.conf
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ argocd_application_namespace }}
+  syncPolicy:
+    automated: {}

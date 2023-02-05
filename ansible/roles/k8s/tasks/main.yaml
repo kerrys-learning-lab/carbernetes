@@ -72,37 +72,3 @@
     owner: "{{ local_owner }}"
     group: "{{ local_group }}"
     mode: '644'
-
-- name: Create /etc/argocd/
-  file:
-    path: /etc/argocd
-    state: directory
-
-- name: Expand ArgoCD Git repo secret template (rpi)
-  ansible.builtin.template:
-    src: argocd-repo-secret.yaml.j2
-    dest: /etc/argocd/argocd-repo-secret.yaml
-  vars:
-    repo_secret_name: "{{ argocd_repo_secret_name }}"
-    repo_project: "{{ argocd_project }}"
-    repo_url: "{{ argocd_repo_url }}"
-    repo_private_key: "{{ argocd_repo_private_key }}"
-
-- name: Expand ArgoCD Application template (rpi)
-  ansible.builtin.template:
-    src: argocd-application.yaml.j2
-    dest: /etc/argocd/argocd-application.yaml
-
-- name: Configure repo secrets for ArgoCD
-  kubernetes.core.k8s:
-    apply: true
-    state: present
-    src: /etc/argocd/argocd-repo-secret.yaml
-    kubeconfig: /etc/kubeconfig
-
-- name: Configure ArgoCD application
-  kubernetes.core.k8s:
-    apply: true
-    state: present
-    src: /etc/argocd/argocd-application.yaml
-    kubeconfig: /etc/kubeconfig

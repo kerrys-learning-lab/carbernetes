@@ -1,9 +1,7 @@
-- name: Configure Raspberry Pi for carbernetes
+- name: Configure ArgoCD for the c9s application
   hosts: rpi_hosts
   become: true
   roles:
-    - os
-    - k8s
     - argocd
   handlers:
     - import_tasks: roles/common/handlers/restart-rpi.yaml

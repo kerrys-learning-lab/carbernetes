@@ -22,7 +22,7 @@ metadata:
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
   rules:
-  - host: pca9685.rpi.local
+  - host: pca9685
     http:
       paths:
         - path: /
