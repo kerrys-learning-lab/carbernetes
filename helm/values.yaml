@@ -9,3 +9,9 @@ pca9685_workload:
   image:
     name: pca9685-service
     tag: v1.1.0-arm64
+
+accelerometer_workload:
+  component: sensors
+  image:
+    name: accelerometer-service
+    tag: v1.0.0-arm64
