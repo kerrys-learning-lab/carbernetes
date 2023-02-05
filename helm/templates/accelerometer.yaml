@@ -12,7 +12,7 @@ spec:
   selector:
     matchLabels:
       role: accelerometer-service
-  replicas: {{ .Values.accelerometer_service.replicas }}
+  replicas: 1
   strategy:
     type: Recreate
   template:
