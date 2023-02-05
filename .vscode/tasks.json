@@ -63,6 +63,23 @@
       }
     },
     {
+      "label": "ansible argocd-only-playbook",
+      "type": "shell",
+      "command": "ansible-playbook",
+      "args": [
+        "-i",
+        "ansible/config/inventory.yaml",
+        "ansible/argocd-only-playbook.yaml"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "reveal": "always",
+        "clear": true
+      }
+    },
+    {
       "label": "ArgoCD port forward (8080)",
       "type": "shell",
       "command": "kubectl",
