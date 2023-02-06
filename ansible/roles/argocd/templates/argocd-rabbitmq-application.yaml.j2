@@ -76,3 +76,12 @@ spec:
     namespace: {{ argocd_application_namespace }}
   syncPolicy:
     automated: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-c9s-default-user
+  namespace: {{ argocd_application_namespace }}
+stringData:
+  username: {{ rabbitmq_default_user }}
+  password: {{ rabbitmq_default_pass }}

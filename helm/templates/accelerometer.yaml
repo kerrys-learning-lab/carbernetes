@@ -31,6 +31,18 @@ spec:
           env:
             - name: RUST_LOG
               value: debug
+            - name: MQTT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-c9s-default-user
+                  key: username
+                  optional: false
+            - name: MQTT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-c9s-default-user
+                  key: password
+                  optional: false
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
