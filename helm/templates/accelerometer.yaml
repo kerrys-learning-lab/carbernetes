@@ -30,7 +30,7 @@ spec:
             - /etc/accelerometer-service/accelerometer.yaml
           env:
             - name: RUST_LOG
-              value: debug
+              value: info
             - name: MQTT_USERNAME
               valueFrom:
                 secretKeyRef:
