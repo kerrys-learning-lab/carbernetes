@@ -15,4 +15,4 @@ accelerometer_workload:
   component: sensors
   image:
     name: accelerometer-service
-    tag: v1.0.0-arm64
+    tag: v1.1.0-arm64
