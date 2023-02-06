@@ -50,7 +50,7 @@ spec:
   selector:
     matchLabels:
       role: pca9685-service
-  replicas: {{ .Values.pca9685_service.replicas }}
+  replicas: 1
   strategy:
     type: Recreate
   template:
