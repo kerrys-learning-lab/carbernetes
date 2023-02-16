@@ -1,10 +1,12 @@
 image_repository: ghcr.io/kerrys-learning-lab
 
+host: raspberrypi.local
+
 pca9685_service:
   component: servo-control
 
 pca9685_workload:
-  enabled: false
+  enabled: true
   component: servo-control
   image:
     name: pca9685-service

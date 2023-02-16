@@ -22,10 +22,10 @@ metadata:
     {{- include "c9s.meta-labels" . | nindent 4 }}
 spec:
   rules:
-  - host: pca9685
+  - host: {{ .Values.host }}
     http:
       paths:
-        - path: /
+        - path: /pca9685/
           pathType: Prefix
           backend:
             service:
