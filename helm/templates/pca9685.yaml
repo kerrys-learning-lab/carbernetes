@@ -20,12 +20,14 @@ metadata:
   labels:
     {{- include "c9s.service-labels" .Values.pca9685_service | nindent 4 }}
     {{- include "c9s.meta-labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: pca9685.rpi.local
-    http:
+  - http:
       paths:
-        - path: /
+        - path: /pca9685(/|$)(.*)
           pathType: Prefix
           backend:
             service:
@@ -33,6 +35,7 @@ spec:
               port:
                 name: http
 ---
+{{ if .Values.pca9685_workload.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -100,3 +103,4 @@ spec:
           hostPath:
             path: /dev/i2c-1
             type: CharDevice
+{{ end }}

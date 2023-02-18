@@ -1,0 +1,65 @@
+---
+{{ if .Values.accelerometer_workload.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accelerometer-service-deployment
+  labels:
+    {{- include "c9s.workload-labels" .Values.accelerometer_workload | nindent 4 }}
+    {{- include "c9s.meta-labels" . | nindent 4 }}
+spec:
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      role: accelerometer-service
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        role: accelerometer-service
+        {{- include "c9s.workload-labels" .Values.accelerometer_workload | nindent 8 }}
+        {{- include "c9s.meta-labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: accelerometer-service
+          image: {{ template "application.image" (dict "Values" .Values "Image" .Values.accelerometer_workload.image) }}
+          args:
+            - --config-file-path
+            - /etc/accelerometer-service/accelerometer.yaml
+          env:
+            - name: RUST_LOG
+              value: info
+            - name: MQTT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-c9s-default-user
+                  key: username
+                  optional: false
+            - name: MQTT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-c9s-default-user
+                  key: password
+                  optional: false
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: rpi-i2c-device
+              mountPath: /dev/i2c-1
+            - name: auto-config-maps
+              mountPath: /etc/accelerometer-service/accelerometer.yaml
+              subPath: accelerometer.yaml
+      securityContext:
+        privileged: true
+      volumes:
+        - name: auto-config-maps
+          configMap:
+            name: auto-config-maps
+        - name: rpi-i2c-device
+          hostPath:
+            path: /dev/i2c-1
+            type: CharDevice
+{{ end }}

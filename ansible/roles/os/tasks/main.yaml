@@ -78,3 +78,20 @@
 
 - name: Flush handlers Docker / container / I2C setup
   ansible.builtin.meta: flush_handlers
+
+- name: Bluetooth status
+  ansible.builtin.command: bluetoothctl show
+  register: bluetooth_status
+  changed_when: false
+
+- name: Turn bluetooth on
+  ansible.builtin.command: bluetoothctl power on
+  when: "bluetooth_status.stdout.find('Powered: yes') == -1"
+
+- name: Enable bluetooth discovery
+  ansible.builtin.command: bluetoothctl discoverable on
+  when: "bluetooth_status.stdout.find('Discoverable: yes') == -1"
+
+- name: Enable bluetooth pairing
+  ansible.builtin.command: bluetoothctl pairable on
+  when: "bluetooth_status.stdout.find('Pairable: yes') == -1"

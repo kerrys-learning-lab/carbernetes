@@ -27,7 +27,7 @@
       }
     },
     {
-      "label": "ansible playbook",
+      "label": "ansible main-rpi-playbook",
       "type": "shell",
       "command": "ansible-playbook",
       "args": [
@@ -35,7 +35,32 @@
         "ansible/config/inventory.yaml",
         "ansible/main-rpi-playbook.yaml"
       ],
-      "problemMatcher": []
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "ansible argocd-only-playbook",
+      "type": "shell",
+      "command": "ansible-playbook",
+      "args": [
+        "-i",
+        "ansible/config/inventory.yaml",
+        "ansible/argocd-only-playbook.yaml"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "reveal": "always",
+        "clear": true
+      }
     },
     {
       "label": "ArgoCD port forward (8080)",
