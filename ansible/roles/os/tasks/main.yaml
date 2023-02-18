@@ -23,39 +23,6 @@
 - name: Flush handlers after upgrade
   ansible.builtin.meta: flush_handlers
 
-- name: Docker host prerequisites
-  ansible.posix.sysctl:
-    name: net.ipv4.ip_forward
-    value: 1
-    state: present
-
-- name: Add Docker GPG apt Key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-
-- name: Add Docker Repository
-  ansible.builtin.apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/debian bullseye stable
-    state: present
-
-- name: Install Docker components
-  ansible.builtin.apt:
-    name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-compose-plugin
-    state: present
-    update_cache: true
-
-- name: Add pi user to applicable groups
-  ansible.builtin.user:
-    name: "{{ rpi_user }}"
-    groups:
-      - docker
-    append: true
-
 - name: Enable container features (/boot/cmdline.txt)
   ansible.builtin.replace:
     path: /boot/cmdline.txt
@@ -76,22 +43,5 @@
   notify:
     - Restart rpi
 
-- name: Flush handlers Docker / container / I2C setup
+- name: Flush handlers - I2C setup
   ansible.builtin.meta: flush_handlers
-
-- name: Bluetooth status
-  ansible.builtin.command: bluetoothctl show
-  register: bluetooth_status
-  changed_when: false
-
-- name: Turn bluetooth on
-  ansible.builtin.command: bluetoothctl power on
-  when: "bluetooth_status.stdout.find('Powered: yes') == -1"
-
-- name: Enable bluetooth discovery
-  ansible.builtin.command: bluetoothctl discoverable on
-  when: "bluetooth_status.stdout.find('Discoverable: yes') == -1"
-
-- name: Enable bluetooth pairing
-  ansible.builtin.command: bluetoothctl pairable on
-  when: "bluetooth_status.stdout.find('Pairable: yes') == -1"
