@@ -9,7 +9,7 @@ metadata:
 data:
   # Format is <ingress-port>: <namespace>/<service>:<service-port>
   1883: "c9s/rabbitmq:mqtt-tcp"
-  5555: "c96/container-registry-service:registry-tcp"
+  5555: "c9s/container-registry-service:registry-tcp"
 ---
 apiVersion: apps/v1
 kind: DaemonSet
