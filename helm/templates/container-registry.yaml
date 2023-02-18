@@ -11,4 +11,3 @@ spec:
   ports:
     - port: 32000
       name: registry-tcp
-      targetPort: 5000
