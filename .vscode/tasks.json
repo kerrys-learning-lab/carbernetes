@@ -83,14 +83,19 @@
       "label": "ArgoCD port forward (8080)",
       "type": "shell",
       "command": "kubectl",
-      "args": [
-        "port-forward",
-        "svc/argo-cd-argocd-server",
-        "-n",
-        "argocd",
-        "8080:443"
-      ],
       "problemMatcher": []
+    },
+    {
+      "label": "Show ArgoCD admin secret",
+      "type": "shell",
+      "command": "./bin/argocd-admin-secret.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "reveal": "always",
+        "clear": true
+      }
     }
   ]
 }
