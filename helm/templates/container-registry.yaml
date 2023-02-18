@@ -9,5 +9,5 @@ spec:
   type: ExternalName
   externalName: registry.container-registry.svc.cluster.local
   ports:
-    - port: 5000
+    - port: 32000
       name: registry-tcp
