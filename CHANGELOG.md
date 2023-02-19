@@ -1,3 +1,9 @@
+## 0.3.1 (2023-02-19)
+
+### Fix
+
+- Missing argocd-c9s-namespace.yaml.j2 (#6)
+
 ## 0.3.0 (2023-02-19)
 
 ### Feat
