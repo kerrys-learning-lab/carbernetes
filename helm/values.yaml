@@ -10,7 +10,7 @@ pca9685_workload:
   component: servo-control
   image:
     name: pca9685-service
-    tag: v1.1.0-arm64
+    tag: v1.3.0-arm64
 
 accelerometer_workload:
   enabled: true

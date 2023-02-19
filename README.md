@@ -37,7 +37,16 @@ NOTE: If using VSCode, template files should be copied automatically upon
   ```
     vscode ➜ /workspace $ kubectl -n argocd port-forward svc/argo-cd-argocd-server 8080:443
   ```
-* `argocd login localhost:8080`
+*
+  ```
+    user@host:~ $ argocd login localhost:8080
+
+    # or
+
+    user@host:~ $ argocd login localhost:8080 \
+                    --username admin \
+                    --password $(./bin/argocd-admin-secret.sh)
+  ```
 * Username: admin
 * Password:
   ```
