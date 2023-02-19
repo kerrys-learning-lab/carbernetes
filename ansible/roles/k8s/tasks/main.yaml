@@ -24,7 +24,7 @@
 
 - name: Configure microk8s addons
   microk8s:
-    addon:
+    addons:
       name:
         - argocd
         - dns

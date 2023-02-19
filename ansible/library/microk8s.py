@@ -110,7 +110,7 @@ def _list_to_map(values, key):
 
 def main():
     module_args = {
-        "addon": {
+        "addons": {
             "type": "dict",
             "required": False,
             "options": {
@@ -139,7 +139,7 @@ def main():
     ansible_module = AnsibleModule(
         argument_spec=module_args,
         supports_check_mode=True,
-        required_one_of=[("addon", "repo")],
+        required_one_of=[("addons", "repo")],
     )
 
     microk8s = Microk8s(ansible_module.params["microk8s_path"])
@@ -152,7 +152,7 @@ def main():
             intermediate_result = microk8s.remove_repo(repo_spec["name"])
         result = _merge_results(result, intermediate_result)
 
-    addon_spec = ansible_module.params.get("addon")
+    addon_spec = ansible_module.params.get("addons")
     if addon_spec:
         enable = addon_spec["enable"]
         method = microk8s.enable_module if enable else microk8s.disable_module

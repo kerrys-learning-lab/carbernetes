@@ -13,6 +13,11 @@
     repo_url: "{{ argocd_repo_url }}"
     repo_private_key: "{{ argocd_repo_private_key }}"
 
+- name: Expand ArgoCD c9s namespace template (rpi)
+  ansible.builtin.template:
+    src: argocd-c9s-namespace.yaml.j2
+    dest: /etc/argocd/argocd-c9s-namespace.yaml
+
 - name: Expand ArgoCD c9s Application template (rpi)
   ansible.builtin.template:
     src: argocd-c9s-application.yaml.j2
@@ -28,6 +33,13 @@
     apply: true
     state: present
     src: /etc/argocd/argocd-repo-secret.yaml
+    kubeconfig: /etc/kubeconfig
+
+- name: Configure c9s namespace
+  kubernetes.core.k8s:
+    apply: true
+    state: present
+    src: /etc/argocd/argocd-c9s-namespace.yaml
     kubeconfig: /etc/kubeconfig
 
 - name: Configure ArgoCD RabbitMQ application
