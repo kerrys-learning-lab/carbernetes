@@ -16,42 +16,20 @@
     name:
       - kubernetes
 
-- name: Status of mycommunity repo
-  ansible.builtin.command: /snap/bin/microk8s addons repo list
-  register: microk8s_community_repo
-  changed_when: false
+- name: Configure custom microk8s repository
+  microk8s:
+    repo:
+      name: mycommunity
+      url: "{{ microk8s_community_addon_repo }}"
 
-- name: Add custom microk8s community repo
-  ansible.builtin.command: >
-    {{ microk8s }} addons repo add mycommunity {{ microk8s_community_addon_repo }}
-  when: microk8s_community_repo.stdout.find('mycommunity') == -1
-
-- name: Status of microk8s dns add-on
-  ansible.builtin.command: "{{ microk8s }} status -a dns"
-  register: microk8s_dns_addon
-  changed_when: false
-
-- name: Install microk8s dns add-on
-  ansible.builtin.command: "{{ microk8s }} enable dns"
-  when: microk8s_dns_addon.stdout.find('enabled') == -1
-
-- name: Status of microk8s ingress add-on
-  ansible.builtin.command: "{{ microk8s }} status -a ingress"
-  register: microk8s_ingress_addon
-  changed_when: false
-
-- name: Install microk8s ingress add-on
-  ansible.builtin.command: "{{ microk8s }} enable ingress"
-  when: microk8s_ingress_addon.stdout.find('enabled') == -1
-
-- name: Status of microk8s argocd add-on
-  ansible.builtin.command: "{{ microk8s }} status -a argocd"
-  register: microk8s_argocd_addon
-  changed_when: false
-
-- name: Install microk8s argocd add-on
-  ansible.builtin.command: "{{ microk8s }} enable argocd"
-  when: microk8s_argocd_addon.stdout.find('enabled') == -1
+- name: Configure microk8s addons
+  microk8s:
+    addons:
+      name:
+        - argocd
+        - dns
+        - ingress
+        - registry
 
 - name: Get microk8s kubectl configuration
   ansible.builtin.command: "{{ microk8s }} config"

@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-registry-service
+  labels:
+    {{- include "c9s.meta-labels" . | nindent 4 }}
+spec:
+  type: ExternalName
+  externalName: registry.container-registry.svc.cluster.local
+  ports:
+    - port: 32000
+      name: registry-tcp

@@ -6,7 +6,9 @@ NOTE: If using VSCode, template files should be copied automatically upon
 * Add IP to ansible/config/inventory.yaml
 * Update ansible/config/vars.yaml
 * Verify ansible access from the host to the pi:
-  ```user@host:~ $ ansible -i ansible/config/inventory.yaml all -m ping```
+  ```
+    user@host:~ $ ansible -i ansible/config/inventory.yaml all -m ping
+  ```
 * Execute the ansible playbook
   ```
     user@host:~ $ ansible-playbook -i ansible/config/inventory.yaml \
