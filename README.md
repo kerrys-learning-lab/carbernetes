@@ -69,7 +69,7 @@ NOTE: Assumes an ingress exists at <xyz-service>
 user@host:~ $ kubectl -n c9s port-forward svc/pca9685-service 9999:9999
 
 # The --resolve option eliminates the need to update /etc/hosts
-user@host:~ $ curl --resolve raspberrypi.local:9999:127.0.0.1 http://raspberrypi.local:9999/pca9685/ping
+user@host:~ $ curl --resolve raspberrypi.local:9999:127.0.0.1 http://raspberrypi.local:9999/pca9685/status
 ```
 
 ### Commit, push, and update ArgoCD

@@ -87,11 +87,11 @@ spec:
               subPath: rocket.toml
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /status
               port: http
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /status
               port: http
       securityContext:
         privileged: true
