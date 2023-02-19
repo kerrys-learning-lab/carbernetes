@@ -39,11 +39,12 @@ NOTE: If using VSCode, template files should be copied automatically upon
   ```
 *
   ```
-    user@host:~ $ argocd login localhost:8080
+    user@host:~ $ argocd login --insecure localhost:8080
 
     # or
 
     user@host:~ $ argocd login localhost:8080 \
+                    --insecure \
                     --username admin \
                     --password $(./bin/argocd-admin-secret.sh)
   ```
